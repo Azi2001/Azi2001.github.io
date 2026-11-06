@@ -61,3 +61,31 @@ const counterObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.6 });
 
 document.querySelectorAll(".stat-number[data-target]").forEach((el) => counterObserver.observe(el));
+
+// build the project cards from projects.js
+const projectsGrid = document.getElementById("projects-grid");
+
+projects.forEach((p) => {
+  const card = document.createElement("article");
+  card.className = "project-card reveal";
+  card.innerHTML = `
+    <div class="project-image">
+            <img src="${p.image}" alt="${p.title} screenshot" loading="lazy"
+           style="object-fit:${p.imageFit || 'cover'}; object-position:${p.imagePosition || 'top'};">
+    </div>
+    <div class="project-body">
+      <h3>${p.title}</h3>
+      <p>${p.description}</p>
+      <div class="project-tags">
+        ${p.tags.map((tag) => `<span>${tag}</span>`).join("")}
+      </div>
+      <div class="project-links">
+        ${p.demo ? `<a class="${p.live ? "" : "primary"}" href="${p.demo}" target="_blank" rel="noopener">Watch demo ▶</a>` : ""}
+        ${p.live ? `<a class="primary" href="${p.live}" target="_blank" rel="noopener">Live demo ↗</a>` : ""}
+        <a href="${p.github}" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  `;
+  projectsGrid.appendChild(card);
+  revealObserver.observe(card);
+});
